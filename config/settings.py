@@ -150,3 +150,17 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API REST para agregação de notícias de múltiplas fontes.',
     'VERSION': '1.0.0',
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+
+CELERY_BEAT_SCHEDULE = {
+    'fetch-news-every-30-minutes': {
+        'task': 'articles.tasks.fetch_all_news',
+        'schedule': 1800.0, 
+    },
+}

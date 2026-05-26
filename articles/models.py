@@ -20,7 +20,7 @@ class Article(models.Model):
     description = models.TextField(blank=True)
     content = models.TextField(blank=True)
     author = models.CharField(max_length=200, blank=True)
-    image_url = models.URLField(blank=True)
+    image_url = models.URLField(blank=True, max_length=2000)
     source = models.ForeignKey(Source, on_delete=models.CASCADE, related_name='articles')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='articles')
     published_at = models.DateTimeField(null=True, blank=True)
