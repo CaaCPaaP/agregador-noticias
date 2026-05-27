@@ -4,14 +4,22 @@ from sources.serializers import SourceSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """Serializer de leitura e escrita para categorias."""
+
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    source = SourceSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
+    """Serializer somente leitura para artigos.
+    
+    Expande source e category como objetos completos
+    em vez de retornar apenas seus IDs.
+    """
+
+    source = SourceSerializer(read_only=True) # Retorna objeto completo da fonte, não apenas o ID
+    category = CategorySerializer(read_only=True) # Retorna objeto completo da categoria, não apenas o ID
 
     class Meta:
         model = Article

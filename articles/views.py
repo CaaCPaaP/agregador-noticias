@@ -5,6 +5,11 @@ from .serializers import ArticleSerializer, CategorySerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    """CRUD de categorias.
+    
+    Leitura pública. Criação, edição e exclusão restritas a admins.
+    """
+
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -15,6 +20,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
+    """Listagem e detalhe de artigos. Somente leitura — artigos são criados apenas pelo Celery.
+    
+    Suporta filtro por source e category, busca por texto e ordenação.
+    """
+
     serializer_class = ArticleSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -24,4 +34,5 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ['-published_at']
 
     def get_queryset(self):
+        # select_related evita o problema N+1: sem ele, cada artigo faria queries separadas para buscar source e category
         return Article.objects.select_related('source', 'category').all()
